@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './account/account.module';
 import { Account } from './account/entities/account.entity';
+import { RoleModule } from './role/role.module';
+import { Role } from './role/entities/role.entity';
 
 @Module({
   imports: [
@@ -15,13 +17,14 @@ import { Account } from './account/entities/account.entity';
       username: 'root',
       password: '12345',
       database: 'learneverything',
-      entities: [Account],
+      entities: [Account, Role],
       synchronize: true,
     }),
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
     AccountModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
