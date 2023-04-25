@@ -1,10 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Account } from './entities/account.entity';
 import { Role } from 'src/role/entities/role.entity';
+import { MailerService } from '@nestjs-modules/mailer';
+import { InjectRepository } from '@nestjs/typeorm';
+
 function extractString(inputString: string): string | null {
   const match = inputString.match(/'([^']+)'/);
   if (match) {
@@ -36,9 +38,10 @@ export class AccountService {
   constructor(
     @InjectRepository(Account)
     private accountsRepository: Repository<Account>,
+    private readonly mailerService: MailerService,
   ) {}
 
-  create(createAccountDto: CreateAccountDto & Account) {
+  create(createAccountDto: CreateAccountDto) {
     const role = new Role();
     role.id = 3;
     createAccountDto.roles = [role];
@@ -64,6 +67,16 @@ export class AccountService {
           );
         }
       });
+    const resSendMail = this.mailerService.sendMail({
+      to: 'a01225568931@gmail.com',
+      subject: 'demo',
+      template: './welcome',
+      context: {
+        password: '123',
+      },
+    });
+    console.log(resSendMail);
+
     return res;
   }
 

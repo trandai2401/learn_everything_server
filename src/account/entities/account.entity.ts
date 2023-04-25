@@ -18,6 +18,9 @@ export class Account {
   @Column({ unique: true })
   email: string;
 
+  @Column()
+  password: string;
+
   @Column({ unique: true })
   phone: string;
 

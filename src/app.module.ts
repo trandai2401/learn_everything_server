@@ -7,6 +7,8 @@ import { AccountModule } from './account/account.module';
 import { Account } from './account/entities/account.entity';
 import { RoleModule } from './role/role.module';
 import { Role } from './role/entities/role.entity';
+import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -20,12 +22,29 @@ import { Role } from './role/entities/role.entity';
       entities: [Account, Role],
       synchronize: true,
     }),
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport:
+          'smtps://trandai2401@gmail.com:lgdlndlwbhvgntzy@smtp.gmail.com',
+        defaults: {
+          from: '"No Reply" <modules@nestjs.com>',
+        },
+        template: {
+          dir: __dirname + '/src/templates/email',
+          adapter: new PugAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+    }),
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
     AccountModule,
     RoleModule,
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })

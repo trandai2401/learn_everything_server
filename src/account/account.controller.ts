@@ -17,8 +17,12 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Post()
-  create(@Body() createAccountDto: CreateAccountDto & Account) {
-    return this.accountService.create(createAccountDto);
+  create(
+    @Body() createAccountDto: CreateAccountDto,
+    @Body('email') email: string,
+  ) {
+    return email;
+    // return this.accountService.create(createAccountDto);
   }
 
   @Get()
