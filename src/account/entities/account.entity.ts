@@ -15,19 +15,21 @@ export class Account {
   @Column()
   fullName: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ unique: true })
   phone: string;
 
-  @Column()
-  verify: string;
+  @Column({ default: 0 })
+  verify: boolean;
 
-  @Column()
-  activity: string;
+  @Column({ default: 0 })
+  activity: boolean;
 
-  @ManyToMany(() => Role)
+  @ManyToMany(() => Role, {
+    cascade: true,
+  })
   @JoinTable()
   roles: Role[];
 }
