@@ -36,4 +36,6 @@ export class Account {
   })
   @JoinTable()
   roles: Role[];
+
+  isAdmin: boolean;
 }

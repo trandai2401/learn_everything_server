@@ -21,6 +21,7 @@
     "start:dev": "nest build --webpack --webpackPath webpack-hmr.config.js --watch"
   },
   "dependencies": {
+    "@casl/ability": "^6.4.0",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
