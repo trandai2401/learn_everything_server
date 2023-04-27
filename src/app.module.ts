@@ -9,6 +9,7 @@ import { RoleModule } from './role/role.module';
 import { Role } from './role/entities/role.entity';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     }),
     AccountModule,
     RoleModule,
+    AuthModule,
   ],
 
   controllers: [AppController],

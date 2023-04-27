@@ -6,6 +6,9 @@ import { Account } from './entities/account.entity';
 import { Role } from 'src/role/entities/role.entity';
 import { MailerService } from '@nestjs-modules/mailer';
 import { InjectRepository } from '@nestjs/typeorm';
+import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from 'bcrypt';
+import { LazyModuleLoader } from '@nestjs/core';
 
 function extractString(inputString: string): string | null {
   const match = inputString.match(/'([^']+)'/);
@@ -39,12 +42,20 @@ export class AccountService {
     @InjectRepository(Account)
     private accountsRepository: Repository<Account>,
     private readonly mailerService: MailerService,
+    private lazyModuleLoader: LazyModuleLoader,
   ) {}
 
-  create(createAccountDto: CreateAccountDto) {
+  async create(createAccountDto: CreateAccountDto) {
+    const randomString: string = uuidv4();
+
+    const password: string = randomString.substring(0, 12);
+    const hashPassword = await bcrypt.hash(password, 10);
+
     const role = new Role();
     role.id = 3;
     createAccountDto.roles = [role];
+    createAccountDto.password = hashPassword;
+
     const res = this.accountsRepository
       .save(createAccountDto)
       .catch((error: InsertError) => {
@@ -72,11 +83,10 @@ export class AccountService {
       subject: 'demo',
       template: './welcome',
       context: {
-        password: '123',
+        name: createAccountDto.fullName,
+        password: password,
       },
     });
-    console.log(resSendMail);
-
     return res;
   }
 
@@ -85,9 +95,24 @@ export class AccountService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} account`;
+    // return this.accountsRepository.findOne()
   }
-
+  async findOneByEmail(email: string): Promise<any> {
+    const account = await this.accountsRepository.findOne({
+      where: { email: email },
+      relations: {
+        roles: true,
+      },
+      select: {
+        verify: false,
+        activity: false,
+        roles: {
+          name: true,
+        },
+      },
+    });
+    return account;
+  }
   update(id: number, updateAccountDto: UpdateAccountDto) {
     return `This action updates a #${id} account`;
   }

@@ -7,10 +7,10 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { Account } from './entities/account.entity';
 
 @Controller('account')
 export class AccountController {
@@ -21,8 +21,7 @@ export class AccountController {
     @Body() createAccountDto: CreateAccountDto,
     @Body('email') email: string,
   ) {
-    return email;
-    // return this.accountService.create(createAccountDto);
+    return this.accountService.create(createAccountDto);
   }
 
   @Get()

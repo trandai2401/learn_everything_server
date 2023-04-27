@@ -30,8 +30,9 @@ export class Account {
   @Column({ default: 0 })
   activity: boolean;
 
-  @ManyToMany(() => Role, {
+  @ManyToMany(() => Role, (role) => role.name, {
     cascade: true,
+    lazy: true,
   })
   @JoinTable()
   roles: Role[];

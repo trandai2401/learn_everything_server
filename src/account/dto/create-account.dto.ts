@@ -6,4 +6,5 @@ export class CreateAccountDto {
   email: string;
   phone: string;
   roles?: Array<Role>;
+  password?: string;
 }
