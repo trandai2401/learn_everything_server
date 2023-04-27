@@ -12,6 +12,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
 import { CaslModule } from './casl/casl.module';
 import { CourseModule } from './course/course.module';
+import { CategoryModule } from './category/category.module';
+import { SubCategoryModule } from './sub-category/sub-category.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { CourseModule } from './course/course.module';
     AuthModule,
     CaslModule,
     CourseModule,
+    CategoryModule,
+    SubCategoryModule,
   ],
 
   controllers: [AppController],
