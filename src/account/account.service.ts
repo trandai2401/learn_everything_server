@@ -98,20 +98,19 @@ export class AccountService {
     // return this.accountsRepository.findOne()
   }
   async findOneByEmail(email: string): Promise<any> {
-    const account = await this.accountsRepository.findOne({
+    const account = await this.accountsRepository.find({
       where: { email: email },
       relations: {
         roles: true,
       },
       select: {
-        verify: false,
-        activity: false,
         roles: {
           name: true,
         },
       },
     });
-    return account;
+    if (account.length > 0) return account[0];
+    return null;
   }
   update(id: number, updateAccountDto: UpdateAccountDto) {
     return `This action updates a #${id} account`;

@@ -11,11 +11,12 @@ import {
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { Public } from 'src/decorators/auth';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
-
+  @Public()
   @Post()
   create(
     @Body() createAccountDto: CreateAccountDto,
