@@ -1,9 +1,11 @@
+import { Course } from 'src/course/entities/course.entity';
 import { Role } from 'src/role/entities/role.entity';
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -37,5 +39,11 @@ export class Account {
   @JoinTable()
   roles: Role[];
 
-  isAdmin: boolean;
+  isAdmin?: boolean;
+
+  @ManyToMany(() => Course, (course) => course.lecturer)
+  coursesTaught: Course[];
+
+  @OneToMany(() => Course, (course) => course.created_by)
+  ownedCourses: Course[];
 }

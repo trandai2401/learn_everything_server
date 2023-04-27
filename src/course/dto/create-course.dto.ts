@@ -1,1 +1,3 @@
-export class CreateCourseDto {}
+export class CreateCourseDto {
+  subCategoryId?: number;
+}

@@ -14,6 +14,9 @@ import { CaslModule } from './casl/casl.module';
 import { CourseModule } from './course/course.module';
 import { CategoryModule } from './category/category.module';
 import { SubCategoryModule } from './sub-category/sub-category.module';
+import { Category } from './category/entities/category.entity';
+import { SubCategory } from './sub-category/entities/sub-category.entity';
+import { Course } from './course/entities/course.entity';
 
 @Module({
   imports: [
@@ -24,7 +27,7 @@ import { SubCategoryModule } from './sub-category/sub-category.module';
       username: 'root',
       password: '12345',
       database: 'learneverything',
-      entities: [Account, Role],
+      entities: [Account, Role, Category, SubCategory, Course],
       synchronize: true,
     }),
     MailerModule.forRootAsync({

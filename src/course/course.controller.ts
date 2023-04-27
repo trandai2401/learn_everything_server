@@ -1,14 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+} from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/auth/guards/role.enum';
+import { Course } from './entities/course.entity';
+import { SubCategory } from 'src/sub-category/entities/sub-category.entity';
+import { Account } from 'src/account/entities/account.entity';
 
 @Controller('course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @Post()
-  create(@Body() createCourseDto: CreateCourseDto) {
+  @Roles(Role.Teacher, Role.Admin)
+  create(@Body() createCourseDto: CreateCourseDto & Course, @Request() req) {
+    const account = new Account();
+    account.id = req.user.sub;
+    createCourseDto.created_by = account;
+    const subCategory = new SubCategory();
+    subCategory.id = createCourseDto.subCategoryId;
+    createCourseDto.subCategory = subCategory;
     return this.courseService.create(createCourseDto);
   }
 
