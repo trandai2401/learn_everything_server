@@ -3,21 +3,22 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { AccountModule } from './account/account.module';
-import { Account } from './account/entities/account.entity';
-import { RoleModule } from './role/role.module';
-import { Role } from './role/entities/role.entity';
+
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { AuthModule } from './auth/auth.module';
-import { CaslModule } from './casl/casl.module';
-import { CourseModule } from './course/course.module';
-import { CategoryModule } from './category/category.module';
-import { SubCategoryModule } from './sub-category/sub-category.module';
-import { Category } from './category/entities/category.entity';
-import { SubCategory } from './sub-category/entities/sub-category.entity';
-import { Course } from './course/entities/course.entity';
-import { LectureModule } from './lecture/lecture.module';
+import { Account } from './modules/account/entities/account.entity';
+import { Role } from './modules/role/entities/role.entity';
+import { Category } from './modules/category/entities/category.entity';
+import { SubCategory } from './modules/sub-category/entities/sub-category.entity';
+import { Course } from './modules/course/entities/course.entity';
+import { AccountModule } from './modules/account/account.module';
+import { RoleModule } from './modules/role/role.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { CaslModule } from './modules/casl/casl.module';
+import { CourseModule } from './modules/course/course.module';
+import { CategoryModule } from './modules/category/category.module';
+import { SubCategoryModule } from './modules/sub-category/sub-category.module';
+import { LectureModule } from './modules/lecture/lecture.module';
 
 @Module({
   imports: [
