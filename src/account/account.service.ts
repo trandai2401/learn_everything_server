@@ -94,8 +94,8 @@ export class AccountService {
     return `This action returns all account`;
   }
 
-  findOne(id: number) {
-    // return this.accountsRepository.findOne()
+  async findOne(id: number): Promise<any> {
+    return this.accountsRepository.findOneById(id);
   }
   async findOneByEmail(email: string): Promise<any> {
     const account = await this.accountsRepository.find({

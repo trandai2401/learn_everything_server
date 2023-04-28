@@ -21,7 +21,25 @@ export class CourseService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} course`;
+    const courses = this.courseRepository.find({
+      where: { id: id },
+      relations: {
+        lecturers: true,
+        created_by: true,
+        subCategory: true,
+      },
+      select: {
+        lecturers: {
+          id: true,
+          fullName: true,
+        },
+        created_by: {
+          id: true,
+          fullName: true,
+        },
+      },
+    });
+    return courses;
   }
 
   update(id: number, updateCourseDto: UpdateCourseDto) {

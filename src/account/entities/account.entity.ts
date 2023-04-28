@@ -41,9 +41,10 @@ export class Account {
 
   isAdmin?: boolean;
 
-  @ManyToMany(() => Course, (course) => course.lecturer)
-  coursesTaught: Course[];
+  // @ManyToMany(() => Course, (course) => course.lecturers)
+  // coursesTaught: Course[];
 
   @OneToMany(() => Course, (course) => course.created_by)
+  @JoinTable()
   ownedCourses: Course[];
 }

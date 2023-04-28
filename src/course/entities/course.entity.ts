@@ -1,7 +1,6 @@
 import { Account } from 'src/account/entities/account.entity';
 import { SubCategory } from 'src/sub-category/entities/sub-category.entity';
 import {
-  Collection,
   Column,
   Entity,
   JoinTable,
@@ -14,13 +13,6 @@ import {
 export class Course {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ManyToMany(() => Account, (account) => account.coursesTaught, {
-    cascade: true,
-    lazy: true,
-  })
-  @JoinTable()
-  lecturer: Account[];
 
   @Column()
   title: string;
@@ -45,4 +37,10 @@ export class Course {
 
   @ManyToOne(() => SubCategory, (subCategory) => subCategory.courese)
   subCategory: SubCategory;
+
+  @ManyToMany(() => Account, {
+    cascade: true,
+  })
+  @JoinTable()
+  lecturers: Array<Account>;
 }

@@ -17,6 +17,7 @@ import { SubCategoryModule } from './sub-category/sub-category.module';
 import { Category } from './category/entities/category.entity';
 import { SubCategory } from './sub-category/entities/sub-category.entity';
 import { Course } from './course/entities/course.entity';
+import { LectureModule } from './lecture/lecture.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { Course } from './course/entities/course.entity';
     CourseModule,
     CategoryModule,
     SubCategoryModule,
+    LectureModule,
   ],
 
   controllers: [AppController],
