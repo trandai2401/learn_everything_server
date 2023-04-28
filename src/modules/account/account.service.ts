@@ -79,7 +79,7 @@ export class AccountService {
         }
       });
     const resSendMail = this.mailerService.sendMail({
-      to: 'a01225568931@gmail.com',
+      to: createAccountDto.email,
       subject: 'demo',
       template: './welcome',
       context: {
