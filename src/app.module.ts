@@ -19,6 +19,7 @@ import { CourseModule } from './modules/course/course.module';
 import { CategoryModule } from './modules/category/category.module';
 import { SubCategoryModule } from './modules/sub-category/sub-category.module';
 import { LectureModule } from './modules/lecture/lecture.module';
+import { ImageModule } from './modules/image/image.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { LectureModule } from './modules/lecture/lecture.module';
     CategoryModule,
     SubCategoryModule,
     LectureModule,
+    ImageModule,
   ],
 
   controllers: [AppController],

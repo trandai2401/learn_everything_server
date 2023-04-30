@@ -10,6 +10,8 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import axios from 'axios';
+
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -20,7 +22,8 @@ import { AccountService } from '../account/account.service';
 import { Role } from '../auth/guards/role.enum';
 import { Account } from '../account/entities/account.entity';
 import { SubCategory } from '../sub-category/entities/sub-category.entity';
-
+import imageImgBB from 'src/service/Image/imbb';
+import { Readable } from 'stream';
 @Controller('course')
 export class CourseController {
   constructor(
@@ -36,9 +39,28 @@ export class CourseController {
     @Request() req,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log(file);
-
+    // console.log(file);
+    console.log(Readable.from(file.buffer));
+    // return file.buffer.toString('base64');
     if (file) {
+      // const res = await axios.post(
+      //   'https://api.imgbb.com/1/upload',
+      //   {
+      //     key: 'e76b08665607a4e4c8a077cd5f12e775',
+      //     image: file.buffer.toString('base64'),
+      //   },
+      //   {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //   },
+      // );
+      // // const res = await imageImgBB.post('', {
+      // //   key: 'e76b08665607a4e4c8a077cd5f12e775',
+      // //   image: file.buffer.toString('base64'),
+      // // });
+      // console.log(res);
+
       return 'Có';
     } else return 'khum';
     // console.log(createCourseDto);
