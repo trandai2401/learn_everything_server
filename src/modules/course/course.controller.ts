@@ -9,6 +9,7 @@ import {
   Request,
   UploadedFile,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
 import axios from 'axios';
 
@@ -24,66 +25,24 @@ import { Account } from '../account/entities/account.entity';
 import { SubCategory } from '../sub-category/entities/sub-category.entity';
 import imageImgBB from 'src/service/Image/imbb';
 import { Readable } from 'stream';
+import { TranformationCourse } from 'src/pipes/course';
 @Controller('course')
 export class CourseController {
-  constructor(
-    private readonly courseService: CourseService,
-    private readonly accountService: AccountService,
-  ) {}
+  constructor(private readonly courseService: CourseService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   @Roles(Role.Teacher, Role.Admin)
+  // @UsePipes(new TranformationCourse())
   async create(
-    @Body() createCourseDto: CreateCourseDto & Course,
+    @Body(new TranformationCourse()) createCourseDto: CreateCourseDto & Course,
     @Request() req,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    // console.log(file);
-    console.log(Readable.from(file.buffer));
-    // return file.buffer.toString('base64');
-    if (file) {
-      // const res = await axios.post(
-      //   'https://api.imgbb.com/1/upload',
-      //   {
-      //     key: 'e76b08665607a4e4c8a077cd5f12e775',
-      //     image: file.buffer.toString('base64'),
-      //   },
-      //   {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //     },
-      //   },
-      // );
-      // // const res = await imageImgBB.post('', {
-      // //   key: 'e76b08665607a4e4c8a077cd5f12e775',
-      // //   image: file.buffer.toString('base64'),
-      // // });
-      // console.log(res);
-
-      return 'Có';
-    } else return 'khum';
-    // console.log(createCourseDto);
-    return 0;
-    // console.log(createCourseDto);
-
-    const lecturers = await createCourseDto.lecturers.map(
-      async (lecturer): Promise<Account | null> => {
-        const lec: Account = await this.accountService.findOne(+lecturer);
-        return lec;
-      },
-    );
-    const lecturersF: Account[] = await Promise.all(lecturers);
-
     const account = new Account();
     account.id = req.user.sub;
     createCourseDto.created_by = account;
-    const subCategory = new SubCategory();
-    subCategory.id = createCourseDto.subCategoryId;
-
-    createCourseDto.subCategory = subCategory;
-    createCourseDto.lecturers = lecturersF ? lecturersF : [];
-    return this.courseService.create(createCourseDto);
+    return this.courseService.create(createCourseDto, file);
   }
 
   @Get()

@@ -1,11 +1,14 @@
 import { Account } from 'src/modules/account/entities/account.entity';
+import { Image } from 'src/modules/image/entities/image.entity';
 import { SubCategory } from 'src/modules/sub-category/entities/sub-category.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -43,4 +46,8 @@ export class Course {
   })
   @JoinTable()
   lecturers: Array<Account>;
+
+  @OneToOne(() => Image, { nullable: true })
+  @JoinColumn()
+  image: Image;
 }

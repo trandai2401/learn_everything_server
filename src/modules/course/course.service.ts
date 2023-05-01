@@ -4,16 +4,43 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from './entities/course.entity';
 import { Repository } from 'typeorm';
+import imageImgBBService from 'src/service/Image/imbb';
+import ImageImgBBDT from 'src/service/Image/ImageDTO';
+import { Image } from '../image/entities/image.entity';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class CourseService {
   constructor(
     @InjectRepository(Course)
     private courseRepository: Repository<Course>,
+    private readonly imageService: ImageService,
   ) {}
 
-  create(createCourseDto: CreateCourseDto & Course) {
-    return this.courseRepository.save(createCourseDto);
+  async create(
+    createCourseDto: CreateCourseDto & Course,
+    file: Express.Multer.File,
+  ): Promise<Course | any> {
+    let image: Promise<ImageImgBBDT>;
+
+    if (file) {
+      image = imageImgBBService.save(file);
+    }
+    const course = this.courseRepository.save(createCourseDto);
+    const [courseSaved, imageSaved] = await Promise.all([course, image]);
+    if (imageSaved.id) {
+      let imageNew = new Image();
+      imageNew.idCloud = imageSaved.id;
+      imageNew.name = imageSaved.title;
+      imageNew.url = imageSaved.url;
+      imageNew.thumbUrl = imageSaved.thumb.url;
+      imageNew.mediumUrl = imageSaved.medium.url;
+      imageNew.deleteUrl = imageSaved.delete_url;
+      imageNew = await this.imageService.create(imageNew);
+      courseSaved.image = imageNew;
+      await this.courseRepository.save(courseSaved);
+    }
+    return courseSaved;
   }
 
   findAll() {
@@ -27,6 +54,7 @@ export class CourseService {
         lecturers: true,
         created_by: true,
         subCategory: true,
+        image: true,
       },
       select: {
         lecturers: {
