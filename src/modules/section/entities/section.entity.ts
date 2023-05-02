@@ -1,5 +1,12 @@
 import { Course } from 'src/modules/course/entities/course.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Item } from 'src/modules/item/entities/item.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 @Entity()
 export class Section {
   @PrimaryGeneratedColumn()
@@ -13,4 +20,7 @@ export class Section {
 
   @ManyToOne(() => Course, (course) => course.sections)
   course?: Course;
+
+  @OneToMany(() => Item, (item) => item.section)
+  items?: Item[];
 }

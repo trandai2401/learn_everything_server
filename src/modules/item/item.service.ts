@@ -16,6 +16,8 @@ export class ItemService {
   ) {}
 
   async create(createItemDto: CreateItemDto & Item, file: Express.Multer.File) {
+    console.log(file);
+
     const item = await this.itemRepository.save(createItemDto);
     const lecture = await this.lectureService.create(new Lecture(), file, item);
     // item.lecture = lecture;

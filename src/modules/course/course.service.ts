@@ -44,7 +44,14 @@ export class CourseService {
   }
 
   findAll() {
-    return `This action returns all course`;
+    return this.courseRepository.find({
+      relations: {
+        sections: {
+          items: true,
+        },
+        image: true,
+      },
+    });
   }
 
   findOne(id: number) {

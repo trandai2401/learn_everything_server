@@ -13,6 +13,7 @@ import { LectureService } from './lecture.service';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { UpdateLectureDto } from './dto/update-lecture.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Item } from '../item/entities/item.entity';
 
 @Controller('lecture')
 export class LectureController {
@@ -24,7 +25,7 @@ export class LectureController {
     @Body() createLectureDto: CreateLectureDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.lectureService.create(createLectureDto, file);
+    return this.lectureService.create(createLectureDto, file, new Item());
   }
 
   @Get()
