@@ -1,11 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { UpdateLectureDto } from './dto/update-lecture.dto';
+import { generatePublicUrl } from 'src/service/videos';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Lecture } from './entities/lecture.entity';
+import { Repository } from 'typeorm';
+import { Item } from '../item/entities/item.entity';
 
 @Injectable()
 export class LectureService {
-  create(createLectureDto: CreateLectureDto) {
-    return 'This action adds a new lecture';
+  constructor(
+    @InjectRepository(Lecture) private lectureRepository: Repository<Lecture>,
+  ) {}
+  async create(
+    createLectureDto: CreateLectureDto,
+    file: Express.Multer.File,
+    item: Item,
+  ) {
+    const res = await generatePublicUrl(file);
+    const lecture = new Lecture();
+    lecture.item = item;
+    lecture.video = res.webContentLink;
+    return this.lectureRepository.save(lecture);
   }
 
   findAll() {

@@ -6,18 +6,25 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { LectureService } from './lecture.service';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { UpdateLectureDto } from './dto/update-lecture.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('lecture')
 export class LectureController {
   constructor(private readonly lectureService: LectureService) {}
 
   @Post()
-  create(@Body() createLectureDto: CreateLectureDto) {
-    return this.lectureService.create(createLectureDto);
+  @UseInterceptors(FileInterceptor('file'))
+  create(
+    @Body() createLectureDto: CreateLectureDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.lectureService.create(createLectureDto, file);
   }
 
   @Get()

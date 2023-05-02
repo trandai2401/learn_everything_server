@@ -1,11 +1,12 @@
 import { google } from 'googleapis';
+import { PassThrough } from 'stream';
 
 const CLIENT_ID =
   '707929663291-abajcr4vio1nktklb49l44d2538g5nre.apps.googleusercontent.com';
 const CLIENT_SECRETS = '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';
 const REDIRECT_URL = 'https://developers.google.com/oauthplayground';
 const refresh_token =
-  '4/0AbUR2VN1fhczOhZtlpmtw-GqTzUTMGm4GXrOwxTJFeuwCC0A6ZQ-GRi30P5wh8OVMnl5AQ';
+  '1//04ph4_AZvlQ9TCgYIARAAGAQSNwF-L9IrwPUhoQfHMFL5Zts24sFRU672UF7CzTWykmgs7IKn8IItz5BaFrpn7BmH37qQmwZ0dVY';
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -20,16 +21,47 @@ const drive = google.drive({
   auth: oauth2Client,
 });
 
-async function uploadImage() {
+async function uploadImage(file: Express.Multer.File) {
   try {
-    const res = drive.files.create({
+    const bufferStream = new PassThrough();
+    bufferStream.end(file.buffer);
+
+    const res = await drive.files.create({
       requestBody: {
-        name: '1234',
-        mimeType: 'application/vnd.google-apps.video',
+        parents: ['18SwoRTRMvI0oLKfBwywucvSjnOofbMpw'],
+        name: file.originalname,
+        mimeType: 'video/mp4',
       },
       media: {
         mimeType: 'video/mp4',
+        body: bufferStream,
       },
     });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function generatePublicUrl(file: Express.Multer.File) {
+  try {
+    const video = await uploadImage(file);
+    const id = video.id;
+    await drive.permissions.create({
+      fileId: id,
+      requestBody: {
+        role: 'reader',
+        type: 'anyone',
+      },
+    });
+
+    const result = await drive.files.get({
+      fileId: id,
+      fields: 'webViewLink, webContentLink',
+    });
+
+    return result.data;
   } catch (error) {}
 }
+
+export { generatePublicUrl };

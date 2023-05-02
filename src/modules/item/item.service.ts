@@ -5,20 +5,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Item } from './entities/item.entity';
 import { Repository } from 'typeorm';
 import { ItemType } from '../item-type/entities/item-type.entity';
+import { LectureService } from '../lecture/lecture.service';
+import { Lecture } from '../lecture/entities/lecture.entity';
 
 @Injectable()
 export class ItemService {
-  // constructor(
-  //   @InjectRepository(Course)
-  //   private courseRepository: Repository<Course>,
-  //   private readonly imageService: ImageService,
-  // ) {}
-
   constructor(
     @InjectRepository(Item) private itemRepository: Repository<Item>,
+    private lectureService: LectureService,
   ) {}
 
-  create(createItemDto: CreateItemDto & Item) {
+  async create(createItemDto: CreateItemDto & Item, file: Express.Multer.File) {
+    const item = await this.itemRepository.save(createItemDto);
+    const lecture = await this.lectureService.create(new Lecture(), file, item);
+    // item.lecture = lecture;
+    return lecture;
     const itemType = new ItemType();
     itemType.id = createItemDto.itemTypeId;
     createItemDto.typeItem = itemType;
