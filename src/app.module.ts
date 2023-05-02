@@ -23,9 +23,11 @@ import { ImageModule } from './modules/image/image.module';
 import { Image } from './modules/image/entities/image.entity';
 import { Section } from './modules/section/entities/section.entity';
 import { SectionModule } from './modules/section/section.module';
-import { ItemTypeModule } from './item-type/item-type.module';
-import { ItemModule } from './item/item.module';
-import { LectureModule } from './lecture/lecture.module';
+import { ItemTypeModule } from './modules/item-type/item-type.module';
+import { ItemModule } from './modules/item/item.module';
+import { ItemType } from './modules/item-type/entities/item-type.entity';
+import { Item } from './modules/item/entities/item.entity';
+import { Lecture } from './modules/lecture/entities/lecture.entity';
 
 @Module({
   imports: [
@@ -36,7 +38,18 @@ import { LectureModule } from './lecture/lecture.module';
       username: 'root',
       password: '12345',
       database: 'learneverything',
-      entities: [Account, Role, Category, SubCategory, Course, Image, Section],
+      entities: [
+        Account,
+        Role,
+        Category,
+        SubCategory,
+        Course,
+        Image,
+        Section,
+        ItemType,
+        Item,
+        Lecture,
+      ],
       synchronize: true,
     }),
     MailerModule.forRootAsync({
