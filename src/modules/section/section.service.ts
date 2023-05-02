@@ -1,11 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Section } from './entities/section.entity';
+import { Repository } from 'typeorm';
+import { Course } from '../course/entities/course.entity';
 
 @Injectable()
 export class SectionService {
-  create(createSectionDto: CreateSectionDto) {
-    return 'This action adds a new section';
+  constructor(
+    @InjectRepository(Section) private sectionRepository: Repository<Section>,
+  ) {}
+
+  create(createSectionDto: CreateSectionDto & Section) {
+    const course = new Course();
+    course.id = +createSectionDto.courseId;
+    createSectionDto.course = course;
+    return this.sectionRepository.save(createSectionDto);
   }
 
   findAll() {

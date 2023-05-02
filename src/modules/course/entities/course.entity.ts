@@ -1,5 +1,6 @@
 import { Account } from 'src/modules/account/entities/account.entity';
 import { Image } from 'src/modules/image/entities/image.entity';
+import { Section } from 'src/modules/section/entities/section.entity';
 import { SubCategory } from 'src/modules/sub-category/entities/sub-category.entity';
 import {
   Column,
@@ -8,6 +9,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -50,4 +52,7 @@ export class Course {
   @OneToOne(() => Image, { nullable: true })
   @JoinColumn()
   image: Image;
+
+  @OneToMany(() => Section, (section) => section.course)
+  sections: Section[];
 }
