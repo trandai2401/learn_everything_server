@@ -40,8 +40,10 @@ export class CourseController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     const account = new Account();
+
     account.id = req.user.sub;
     createCourseDto.created_by = account;
+    // return createCourseDto;
     return this.courseService.create(createCourseDto, file);
   }
 

@@ -1,3 +1,3 @@
 export class CreateCourseDto {
-  subCategoryId?: number;
+  subCategoryId?: number[];
 }

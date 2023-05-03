@@ -1,11 +1,14 @@
 import { Course } from 'src/modules/course/entities/course.entity';
+import { Image } from 'src/modules/image/entities/image.entity';
 import { Role } from 'src/modules/role/entities/role.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -34,7 +37,6 @@ export class Account {
 
   @ManyToMany(() => Role, (role) => role.name, {
     cascade: true,
-    lazy: true,
   })
   @JoinTable()
   roles: Role[];
@@ -47,4 +49,8 @@ export class Account {
   @OneToMany(() => Course, (course) => course.created_by)
   @JoinTable()
   ownedCourses: Course[];
+
+  @OneToOne(() => Image)
+  @JoinColumn()
+  avatar: Image;
 }

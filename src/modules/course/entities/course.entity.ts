@@ -40,14 +40,20 @@ export class Course {
   @ManyToOne(() => Account, (account) => account.ownedCourses)
   created_by: Account;
 
-  @ManyToOne(() => SubCategory, (subCategory) => subCategory.courese)
-  subCategory: SubCategory;
+  // @ManyToMany(() => SubCategory, {
+  //   cascade: true,
+  // })
+  // @JoinTable()
+  // subCategories: SubCategory[];
+  @ManyToMany(() => SubCategory, (sub) => sub.courses)
+  @JoinTable()
+  subCategories: SubCategory[];
 
   @ManyToMany(() => Account, {
     cascade: true,
   })
   @JoinTable()
-  lecturers: Array<Account>;
+  lecturers: Account[];
 
   @OneToOne(() => Image, { nullable: true })
   @JoinColumn()
@@ -55,4 +61,7 @@ export class Course {
 
   @OneToMany(() => Section, (section) => section.course)
   sections: Section[];
+
+  @Column({ default: 0 })
+  loves: number;
 }

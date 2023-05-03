@@ -3,6 +3,7 @@ import { Course } from 'src/modules/course/entities/course.entity';
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -19,6 +20,8 @@ export class SubCategory {
   @ManyToOne(() => Category, (category) => category.subCategories)
   category: Category;
 
-  @OneToMany(() => Course, (course) => course.subCategory)
-  courese: Course[];
+  // @ManyToMany(() => Course, (course) => course.subCategories)
+  // courses: Course[];
+  @ManyToMany(() => Course, (course) => course.subCategories)
+  courses: Course[];
 }

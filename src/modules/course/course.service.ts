@@ -26,15 +26,19 @@ export class CourseService {
     if (file) {
       image = imageImgBBService.save(file);
     }
+    console.log(12345);
     const course = this.courseRepository.save(createCourseDto);
     const [courseSaved, imageSaved] = await Promise.all([course, image]);
+
     if (imageSaved.id) {
       let imageNew = new Image();
       imageNew.idCloud = imageSaved.id;
       imageNew.name = imageSaved.title;
       imageNew.url = imageSaved.url;
       imageNew.thumbUrl = imageSaved.thumb.url;
-      imageNew.mediumUrl = imageSaved.medium.url;
+      imageNew.mediumUrl = imageSaved.medium?.url
+        ? imageSaved.medium?.url
+        : imageSaved.thumb.url;
       imageNew.deleteUrl = imageSaved.delete_url;
       imageNew = await this.imageService.create(imageNew);
       courseSaved.image = imageNew;
@@ -50,6 +54,15 @@ export class CourseService {
           items: true,
         },
         image: true,
+        created_by: {
+          avatar: true,
+        },
+        subCategories: true,
+      },
+      select: {
+        created_by: {
+          fullName: true,
+        },
       },
     });
   }
@@ -60,8 +73,8 @@ export class CourseService {
       relations: {
         lecturers: true,
         created_by: true,
-        subCategory: true,
         image: true,
+        subCategories: true,
       },
       select: {
         lecturers: {
