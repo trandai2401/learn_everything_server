@@ -102,6 +102,7 @@ export class AccountService {
       where: { email: email },
       relations: {
         roles: true,
+        avatar: true,
       },
       select: {
         roles: {

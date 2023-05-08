@@ -1,3 +1,4 @@
+import { EntityBase } from 'src/Entity/EntityBase';
 import { Account } from 'src/modules/account/entities/account.entity';
 import { Image } from 'src/modules/image/entities/image.entity';
 import { Section } from 'src/modules/section/entities/section.entity';
@@ -15,14 +16,14 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Course {
+export class Course extends EntityBase {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   title: string;
 
-  @Column()
+  @Column({ length: 2000 })
   description: string;
 
   @Column()
@@ -45,7 +46,7 @@ export class Course {
   // })
   // @JoinTable()
   // subCategories: SubCategory[];
-  @ManyToMany(() => SubCategory, (sub) => sub.courses)
+  @ManyToMany(() => SubCategory, (sub) => sub.courses, { cascade: true })
   @JoinTable()
   subCategories: SubCategory[];
 
@@ -55,11 +56,11 @@ export class Course {
   @JoinTable()
   lecturers: Account[];
 
-  @OneToOne(() => Image, { nullable: true })
+  @OneToOne(() => Image, { nullable: true, cascade: true })
   @JoinColumn()
   image: Image;
 
-  @OneToMany(() => Section, (section) => section.course)
+  @OneToMany(() => Section, (section) => section.course, { cascade: true })
   sections: Section[];
 
   @Column({ default: 0 })

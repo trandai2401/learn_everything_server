@@ -1,3 +1,4 @@
+import { DemoEntity } from 'src/Entity/DemoEnity';
 import { Item } from 'src/modules/item/entities/item.entity';
 import {
   Column,

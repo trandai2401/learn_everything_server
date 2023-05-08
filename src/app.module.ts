@@ -20,6 +20,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { SubCategoryModule } from './modules/sub-category/sub-category.module';
 import { LectureModule } from './modules/lecture/lecture.module';
 import { ImageModule } from './modules/image/image.module';
+import { CartModule } from './modules/cart/cart.module';
 import { Image } from './modules/image/entities/image.entity';
 import { Section } from './modules/section/entities/section.entity';
 import { SectionModule } from './modules/section/section.module';
@@ -28,7 +29,7 @@ import { ItemModule } from './modules/item/item.module';
 import { ItemType } from './modules/item-type/entities/item-type.entity';
 import { Item } from './modules/item/entities/item.entity';
 import { Lecture } from './modules/lecture/entities/lecture.entity';
-
+import { Cart } from './modules/cart/entities/cart.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -49,6 +50,7 @@ import { Lecture } from './modules/lecture/entities/lecture.entity';
         ItemType,
         Item,
         Lecture,
+        Cart,
       ],
       synchronize: true,
     }),
@@ -83,6 +85,7 @@ import { Lecture } from './modules/lecture/entities/lecture.entity';
     SectionModule,
     ItemTypeModule,
     ItemModule,
+    CartModule,
   ],
 
   controllers: [AppController],

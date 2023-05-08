@@ -26,7 +26,6 @@ export class CourseService {
     if (file) {
       image = imageImgBBService.save(file);
     }
-    console.log(12345);
     const course = this.courseRepository.save(createCourseDto);
     const [courseSaved, imageSaved] = await Promise.all([course, image]);
 
@@ -71,16 +70,14 @@ export class CourseService {
     const courses = this.courseRepository.find({
       where: { id: id },
       relations: {
-        lecturers: true,
+        sections: {
+          items: { typeItem: true, lecture: true },
+        },
         created_by: true,
         image: true,
         subCategories: true,
       },
       select: {
-        lecturers: {
-          id: true,
-          fullName: true,
-        },
         created_by: {
           id: true,
           fullName: true,
@@ -96,5 +93,52 @@ export class CourseService {
 
   remove(id: number) {
     return `This action removes a #${id} course`;
+  }
+
+  findWhere(where) {
+    return this.courseRepository.find({
+      where: { ...where },
+      relations: {
+        sections: {
+          items: true,
+        },
+        image: true,
+        created_by: {
+          avatar: true,
+        },
+        subCategories: true,
+      },
+      select: {
+        created_by: {
+          fullName: true,
+        },
+      },
+    });
+  }
+
+  getDataForEdit(id: number) {
+    const courses = this.courseRepository.find({
+      where: { id: id },
+      relations: {
+        lecturers: true,
+        created_by: true,
+        image: true,
+        subCategories: true,
+        sections: {
+          items: { typeItem: true, lecture: true },
+        },
+      },
+      select: {
+        lecturers: {
+          id: true,
+          fullName: true,
+        },
+      },
+      order: {
+        id: 'ASC',
+        sections: { items: { id: 'ASC' } },
+      },
+    });
+    return courses;
   }
 }

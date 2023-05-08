@@ -10,7 +10,7 @@ export class TranformationCourse implements PipeTransform {
     createCourseDto: (CreateCourseDto & Course) & { fieldname: string },
     metadata: ArgumentMetadata,
   ): Promise<any> {
-    const lecturers = createCourseDto.lecturers.map((lecturer) => {
+    const lecturers = createCourseDto?.lecturers?.map((lecturer) => {
       const lec = new Account();
       lec.id = +lecturer;
       return lec;
@@ -21,8 +21,8 @@ export class TranformationCourse implements PipeTransform {
       lec.id = +sub;
       return lec;
     });
-    const subCategory = new SubCategory();
-    subCategory.id = +createCourseDto.subCategoryId;
+    // const subCategory = new SubCategory();
+    // subCategory.id = +createCourseDto.subCategoryId;
 
     const [lecturersF, subCategoriesF] = await Promise.all([
       lecturers,
@@ -31,7 +31,7 @@ export class TranformationCourse implements PipeTransform {
 
     // console.log(lecturersF, subCategoriesF);
 
-    createCourseDto.lecturers = lecturersF;
+    createCourseDto.lecturers = lecturersF ? lecturersF : [];
 
     createCourseDto.subCategories = subCategoriesF;
 

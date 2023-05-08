@@ -16,14 +16,15 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const { password, id, verify, activity, __roles__, ...result } = user;
+    const { password, id, verify, activity, roles, ...result } = user;
+    console.log(user);
 
-    const roles = __roles__.map((role) => role.name);
+    const rolesArr = roles.map((role) => role.name);
     const payload = {
       username: user.fullName,
       sub: user.id,
       ...result,
-      roles,
+      roles: rolesArr,
     };
 
     return {

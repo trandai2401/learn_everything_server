@@ -1,7 +1,16 @@
+import { DemoEntity } from 'src/Entity/DemoEnity';
 import { ItemType } from 'src/modules/item-type/entities/item-type.entity';
 import { Lecture } from 'src/modules/lecture/entities/lecture.entity';
 import { Section } from 'src/modules/section/entities/section.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Item {
@@ -11,10 +20,10 @@ export class Item {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ default: '' })
   description: string;
 
-  @Column()
+  @Column({ default: 0 })
   time?: number;
 
   @Column({ nullable: true })
@@ -26,5 +35,9 @@ export class Item {
   @ManyToOne(() => Section, (section) => section.items)
   section: Section;
 
-  lecture?: Lecture;
+  @OneToOne(() => Lecture, (lecture) => lecture.item, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  lecture: Lecture;
 }

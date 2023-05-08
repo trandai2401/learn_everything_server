@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { ItemType } from '../item-type/entities/item-type.entity';
 import { LectureService } from '../lecture/lecture.service';
 import { Lecture } from '../lecture/entities/lecture.entity';
+import { Section } from '../section/entities/section.entity';
 
 @Injectable()
 export class ItemService {
@@ -16,18 +17,21 @@ export class ItemService {
   ) {}
 
   async create(createItemDto: CreateItemDto & Item, file: Express.Multer.File) {
-    console.log(file);
-
-    const item = await this.itemRepository.save(createItemDto);
-    const lecture = await this.lectureService.create(new Lecture(), file, item);
-    // item.lecture = lecture;
-    return lecture;
     const itemType = new ItemType();
     itemType.id = createItemDto.itemTypeId;
     createItemDto.typeItem = itemType;
+    const section = new Section();
+    section.id = createItemDto.sectionId;
+    createItemDto.section = section;
     console.log(createItemDto);
+    const item = await this.itemRepository.save(createItemDto);
+    const lecture = await this.lectureService.create(new Lecture(), file, item);
+    // item.lecture = lecture;
+    // return lecture;
 
-    return this.itemRepository.save(createItemDto);
+    console.log(item);
+
+    return this.itemRepository.save(item);
   }
 
   findAll() {

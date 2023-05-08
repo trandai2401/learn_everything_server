@@ -21,6 +21,9 @@ export class Section {
   @ManyToOne(() => Course, (course) => course.sections)
   course?: Course;
 
-  @OneToMany(() => Item, (item) => item.section)
+  @OneToMany(() => Item, (item) => item.section, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   items?: Item[];
 }

@@ -1,13 +1,19 @@
+import { Item } from 'src/modules/item/entities/item.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class EntityBase extends BaseEntity {
+export class DemoEntity extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
