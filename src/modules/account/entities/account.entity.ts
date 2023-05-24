@@ -1,6 +1,7 @@
 import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { Course } from 'src/modules/course/entities/course.entity';
 import { Image } from 'src/modules/image/entities/image.entity';
+import { Payment } from 'src/modules/payment/enitites/payment.entity';
 import { Role } from 'src/modules/role/entities/role.entity';
 import {
   Column,
@@ -57,4 +58,7 @@ export class Account {
 
   @OneToMany(() => Cart, (cart) => cart.account)
   carts: Cart[];
+
+  @OneToMany(() => Payment, (payment) => payment.account)
+  payments?: Payment[];
 }

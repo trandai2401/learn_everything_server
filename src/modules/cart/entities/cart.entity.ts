@@ -1,6 +1,8 @@
 import { Account } from 'src/modules/account/entities/account.entity';
 import { Course } from 'src/modules/course/entities/course.entity';
+import { Payment } from 'src/modules/payment/enitites/payment.entity';
 import {
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -12,10 +14,10 @@ import {
 @Entity()
 @Unique(['account', 'course'])
 export class Cart {
-  @PrimaryColumn()
+  @PrimaryColumn({ nullable: false })
   accountId: number;
 
-  @PrimaryColumn()
+  @PrimaryColumn({ nullable: false })
   courseId: number;
 
   @ManyToOne(() => Account, (account) => account.carts, {
@@ -28,4 +30,11 @@ export class Cart {
   @ManyToOne(() => Course, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'courseId' })
   course?: Course;
+
+  @Column({ default: false })
+  bought?: boolean;
+
+  @ManyToOne(() => Payment, (payment) => payment.carts)
+  @JoinColumn()
+  payment?: Payment;
 }
