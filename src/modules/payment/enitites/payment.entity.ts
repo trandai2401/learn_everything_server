@@ -25,10 +25,10 @@ export class Payment {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  date: Date;
+  date?: Date;
 
   @OneToMany(() => Cart, (cart) => cart.payment)
-  carts?: Cart[];
+  carts: Cart[];
 
   @ManyToOne(() => Account, (account) => account.payments)
   account?: Account;

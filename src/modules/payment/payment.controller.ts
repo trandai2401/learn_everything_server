@@ -12,7 +12,7 @@ export class PaymentController {
 
   @Post()
   @Public()
-  create(@Req() req: Request, @Res() res: Response) {
+  async create(@Req() req: Request, @Res() res: Response) {
     // return { a: 'demo' };
     process.env.TZ = 'Asia/Ho_Chi_Minh';
 
@@ -29,8 +29,13 @@ export class PaymentController {
     const secretKey = config['vnp_HashSecret'];
     let vnpUrl = config['vnp_Url'];
     const returnUrl = config['vnp_ReturnUrl'];
-    const orderId = this.generateRandomString();
-    const amount = req.body.amount;
+
+    const payment = await this.paymentService.create(+req.body['userId']);
+    const orderId = payment.id;
+    const amount = payment.total;
+
+    console.log(payment);
+
     const bankCode = req.body.bankCode;
 
     let locale = req.body.language;
@@ -77,7 +82,9 @@ export class PaymentController {
     delete vnp_Params['vnp_SecureHashType'];
 
     vnp_Params = this.sortObject(vnp_Params);
-
+    const paymentId = req.query['vnp_TxnRef'];
+    console.log(paymentId);
+    this.paymentService.payment(paymentId);
     const tmnCode = config['vnp_TmnCode'];
     const secretKey = config['vnp_HashSecret'];
 
@@ -89,7 +96,7 @@ export class PaymentController {
     if (secureHash === signed) {
       //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
 
-      return res.status(200).json(vnp_Params['vnp_ResponseCode']);
+      return res.redirect('http://localhost:3000/course-management');
     } else {
       return res.status(200).json('97');
     }

@@ -5,11 +5,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from './entities/course.entity';
 import { AccountModule } from '../account/account.module';
 import { ImageModule } from '../image/image.module';
+import { Cart } from '../cart/entities/cart.entity';
+import { CourseGateway } from './course.gateway';
+import { CommentModule } from '../comment/comment.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Course]), AccountModule, ImageModule],
+  imports: [
+    TypeOrmModule.forFeature([Course]),
+    AccountModule,
+    ImageModule,
+    TypeOrmModule.forFeature([Cart]),
+    CommentModule,
+  ],
 
   controllers: [CourseController],
-  providers: [CourseService],
+  providers: [CourseService, CourseGateway],
 })
 export class CourseModule {}

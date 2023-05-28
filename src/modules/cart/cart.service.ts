@@ -29,9 +29,9 @@ export class CartService {
     return `This action returns all cart`;
   }
 
-  findOne(id: number) {
+  findOne(id: number): Promise<Cart[]> {
     return this.cartRepository.find({
-      where: { account: { id: id } },
+      where: { account: { id: id }, bought: false },
       relations: {
         course: { image: true, created_by: true },
       },
@@ -53,4 +53,30 @@ export class CartService {
     const cart: Cart = { accountId: accountId, courseId: courseId };
     return this.cartRepository.remove(cart);
   }
+
+  payment = async (paymentId) => {
+    this.cartRepository.update(
+      { bought: false, payment: paymentId },
+      { bought: true },
+    );
+  };
+
+  getMyCourse = async (userId) => {
+    return this.cartRepository.find({
+      where: { account: { id: userId }, bought: true },
+      relations: {
+        course: {
+          image: true,
+          created_by: { avatar: true },
+        },
+      },
+      select: {
+        course: {
+          created_by: { fullName: true },
+          title: true,
+          price: true,
+        },
+      },
+    });
+  };
 }

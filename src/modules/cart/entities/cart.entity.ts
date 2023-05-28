@@ -34,7 +34,13 @@ export class Cart {
   @Column({ default: false })
   bought?: boolean;
 
-  @ManyToOne(() => Payment, (payment) => payment.carts)
+  @ManyToOne(() => Payment, (payment) => payment.carts, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   payment?: Payment;
+
+  @Column({ nullable: true })
+  lectureBeingLearned?: number;
 }

@@ -1,5 +1,6 @@
 import { EntityBase } from 'src/Entity/EntityBase';
 import { Account } from 'src/modules/account/entities/account.entity';
+import { Comment } from 'src/modules/comment/entities/comment.entity';
 import { Image } from 'src/modules/image/entities/image.entity';
 import { Section } from 'src/modules/section/entities/section.entity';
 import { SubCategory } from 'src/modules/sub-category/entities/sub-category.entity';
@@ -65,4 +66,7 @@ export class Course extends EntityBase {
 
   @Column({ default: 0 })
   loves: number;
+
+  @OneToMany(() => Comment, (comment) => comment.course)
+  comments: Comment[];
 }

@@ -8,6 +8,7 @@ import imageImgBBService from 'src/service/Image/imbb';
 import ImageImgBBDT from 'src/service/Image/ImageDTO';
 import { Image } from '../image/entities/image.entity';
 import { ImageService } from '../image/image.service';
+import { Cart } from '../cart/entities/cart.entity';
 
 @Injectable()
 export class CourseService {
@@ -15,6 +16,7 @@ export class CourseService {
     @InjectRepository(Course)
     private courseRepository: Repository<Course>,
     private readonly imageService: ImageService,
+    @InjectRepository(Cart) private cartRepository: Repository<Cart>,
   ) {}
 
   async create(
@@ -141,4 +143,29 @@ export class CourseService {
     });
     return courses;
   }
+
+  getCourseToLearn = async (userId, courseId) => {
+    const carts = await this.cartRepository.find({
+      where: { accountId: userId, courseId: courseId },
+      relations: {
+        course: {
+          lecturers: true,
+          created_by: true,
+          image: true,
+          subCategories: true,
+          sections: {
+            items: { typeItem: true, lecture: true },
+          },
+        },
+      },
+      order: {
+        course: { sections: { items: { id: 'ASC' } } },
+      },
+    });
+    let cart = null;
+    if (carts.length != 0) {
+      cart = carts[0];
+    }
+    return cart;
+  };
 }

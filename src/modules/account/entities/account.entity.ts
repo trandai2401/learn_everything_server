@@ -1,4 +1,5 @@
 import { Cart } from 'src/modules/cart/entities/cart.entity';
+import { Comment } from 'src/modules/comment/entities/comment.entity';
 import { Course } from 'src/modules/course/entities/course.entity';
 import { Image } from 'src/modules/image/entities/image.entity';
 import { Payment } from 'src/modules/payment/enitites/payment.entity';
@@ -61,4 +62,7 @@ export class Account {
 
   @OneToMany(() => Payment, (payment) => payment.account)
   payments?: Payment[];
+
+  @OneToMany(() => Comment, (comment) => comment.account)
+  comments: Comment[];
 }

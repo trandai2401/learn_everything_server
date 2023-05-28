@@ -32,6 +32,9 @@ import { Lecture } from './modules/lecture/entities/lecture.entity';
 import { Cart } from './modules/cart/entities/cart.entity';
 import { PaymentModule } from './modules/payment/payment.module';
 import { Payment } from './modules/payment/enitites/payment.entity';
+import { EventsModule } from './modules/events/events.module';
+import { CommentModule } from './modules/comment/comment.module';
+import { Comment } from './modules/comment/entities/comment.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -54,6 +57,7 @@ import { Payment } from './modules/payment/enitites/payment.entity';
         Lecture,
         Cart,
         Payment,
+        Comment,
       ],
       synchronize: true,
     }),
@@ -90,6 +94,8 @@ import { Payment } from './modules/payment/enitites/payment.entity';
     ItemModule,
     CartModule,
     PaymentModule,
+    EventsModule,
+    CommentModule,
   ],
 
   controllers: [AppController],

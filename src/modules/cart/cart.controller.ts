@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Request,
+  Req,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CreateCartDto } from './dto/create-cart.dto';
@@ -25,6 +26,12 @@ export class CartController {
   findOwner(@Request() req) {
     return this.cartService.findOne(+req.user.sub);
   }
+
+  @Get('mycart')
+  getMyCourse(@Request() req) {
+    return this.cartService.getMyCourse(req.user.sub);
+  }
+
   @Get()
   findAll() {
     return this.cartService.findAll();

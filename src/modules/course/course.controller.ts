@@ -56,6 +56,10 @@ export class CourseController {
     const id = req.user.sub;
     return this.courseService.findWhere({ created_by: { id: id } });
   }
+  @Get('purchasedcourse/:id')
+  getCourseToLearn(@Param('id') id: string, @Request() req) {
+    return this.courseService.getCourseToLearn(req.user.sub, id);
+  }
 
   @Get('data/:id')
   async getDataForEdit(@Param('id') id: string) {
