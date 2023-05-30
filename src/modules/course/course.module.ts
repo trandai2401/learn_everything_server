@@ -8,6 +8,7 @@ import { ImageModule } from '../image/image.module';
 import { Cart } from '../cart/entities/cart.entity';
 import { CourseGateway } from './course.gateway';
 import { CommentModule } from '../comment/comment.module';
+import { CartModule } from '../cart/cart.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CommentModule } from '../comment/comment.module';
     ImageModule,
     TypeOrmModule.forFeature([Cart]),
     CommentModule,
+    CartModule,
   ],
 
   controllers: [CourseController],

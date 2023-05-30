@@ -47,8 +47,10 @@ export class CourseController {
 
   @Get()
   @Public()
-  findAll() {
-    return this.courseService.findAll();
+  async findAll(@Request() req) {
+    console.log(req?.user); 
+
+    return this.courseService.findAll(req?.user?.sub);
   }
   @Get('owner')
   @Roles(Role.Teacher, Role.Admin)

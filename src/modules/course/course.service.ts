@@ -3,12 +3,13 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from './entities/course.entity';
-import { Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import imageImgBBService from 'src/service/Image/imbb';
 import ImageImgBBDT from 'src/service/Image/ImageDTO';
 import { Image } from '../image/entities/image.entity';
 import { ImageService } from '../image/image.service';
 import { Cart } from '../cart/entities/cart.entity';
+import { CartService } from '../cart/cart.service';
 
 @Injectable()
 export class CourseService {
@@ -17,6 +18,7 @@ export class CourseService {
     private courseRepository: Repository<Course>,
     private readonly imageService: ImageService,
     @InjectRepository(Cart) private cartRepository: Repository<Cart>,
+    private readonly cartService: CartService,
   ) {}
 
   async create(
@@ -48,8 +50,19 @@ export class CourseService {
     return courseSaved;
   }
 
-  findAll() {
+  async findAll(userId = undefined) {
+    let courseIds = [];
+    if (userId) {
+      const cart = await this.cartService.getMyCourse(userId);
+      courseIds = cart.map((cart) => {
+        return cart.courseId;
+      });
+      console.log(courseIds);
+    }
     return this.courseRepository.find({
+      where: {
+        id: Not(In(courseIds)),
+      },
       relations: {
         sections: {
           items: true,
