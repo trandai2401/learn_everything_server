@@ -22,6 +22,15 @@ export class CartController {
     return this.cartService.create(req.user.sub, courseId);
   }
 
+  @Post('updateLecBeingLearn')
+  async updateLecBeingLearn(@Request() req, @Body() body) {
+    return await this.cartService.update(
+      body.cartId,
+      req['user'].sub,
+      body.lecId,
+    );
+  }
+
   @Get()
   findOwner(@Request() req) {
     return this.cartService.findOne(+req.user.sub);
@@ -42,10 +51,10 @@ export class CartController {
     return this.cartService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
-    return this.cartService.update(+id, updateCartDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
+  //   return this.cartService.update(+id, updateCartDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') courseId: string, @Request() req) {

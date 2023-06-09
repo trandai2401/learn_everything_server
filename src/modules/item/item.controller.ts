@@ -21,11 +21,13 @@ export class ItemController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  create(
+  async create(
     @UploadedFile() file: Express.Multer.File,
     @Body() createItemDto: CreateItemDto & Item,
   ) {
-    return this.itemService.create(createItemDto, file);
+    const item = await this.itemService.create(createItemDto, file);
+
+    return item;
   }
 
   @Get()

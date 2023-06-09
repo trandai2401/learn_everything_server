@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
   UsePipes,
+  Query,
 } from '@nestjs/common';
 import axios from 'axios';
 
@@ -42,14 +43,20 @@ export class CourseController {
     account.id = req.user.sub;
     createCourseDto.created_by = account;
     // return createCourseDto;
-    return this.courseService.create(createCourseDto, file);
+    return await this.courseService.create(createCourseDto, file);
+  }
+
+  @Get('search')
+  @Public()
+  async search(@Query() query) {
+    console.log(query);
+    const res = await this.courseService.search(query);
+    return res;
   }
 
   @Get()
   @Public()
   async findAll(@Request() req) {
-    console.log(req?.user); 
-
     return this.courseService.findAll(req?.user?.sub);
   }
   @Get('owner')

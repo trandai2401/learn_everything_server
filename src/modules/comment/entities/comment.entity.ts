@@ -2,6 +2,7 @@ import { Account } from 'src/modules/account/entities/account.entity';
 import { Course } from 'src/modules/course/entities/course.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryColumn,
@@ -21,4 +22,10 @@ export class Comment {
 
   @ManyToOne(() => Course, (course) => course.comments)
   course: Course;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  public time: Date;
 }

@@ -23,15 +23,12 @@ export class ItemService {
     const section = new Section();
     section.id = createItemDto.sectionId;
     createItemDto.section = section;
-    console.log(createItemDto);
     const item = await this.itemRepository.save(createItemDto);
     const lecture = await this.lectureService.create(new Lecture(), file, item);
     // item.lecture = lecture;
     // return lecture;
 
-    console.log(item);
-
-    return this.itemRepository.save(item);
+    return await this.itemRepository.save(item);
   }
 
   findAll() {

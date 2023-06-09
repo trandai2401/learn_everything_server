@@ -15,6 +15,7 @@ import { AuthGuardCmt } from '../auth/guards/auth_gateway.guard';
 import { CommentService } from '../comment/comment.service';
 import { Account } from '../account/entities/account.entity';
 import { Course } from './entities/course.entity';
+import { CreateCommentDto } from '../comment/dto/create-comment.dto';
 
 @WebSocketGateway({
   cors: {
@@ -44,8 +45,6 @@ export class CourseGateway {
   @SubscribeMessage('comment')
   @UseGuards(AuthGuardCmt)
   async createComment(@Request() req, @MessageBody() data) {
-    console.log(data);
-
     const newComment = await this.commentService.create({
       accountId: req.user.sub as number,
       content: data.content as string,
@@ -53,7 +52,7 @@ export class CourseGateway {
       id: 0,
       account: new Account(),
       course: new Course(),
-    });
+    } as CreateCommentDto);
 
     this.server.emit(`course:${data.courseId}`, newComment);
     // console.log(newComment);

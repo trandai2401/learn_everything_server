@@ -25,8 +25,6 @@ export class CommentController {
   @Get('getAllbyCourse')
   @Public()
   getAllByCourseId(@Query('courseId') courseId: number) {
-    console.log(courseId, 11111);
-
     return this.commentService.findAllByCourseId(courseId);
   }
 

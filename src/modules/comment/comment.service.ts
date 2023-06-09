@@ -15,7 +15,6 @@ export class CommentService {
   ) {}
 
   async create(createCommentDto: CreateCommentDto) {
-    console.log(createCommentDto);
     const newComment = new Comment();
 
     const account = new Account();

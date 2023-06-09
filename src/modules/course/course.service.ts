@@ -3,7 +3,7 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from './entities/course.entity';
-import { In, Not, Repository } from 'typeorm';
+import { Between, In, Not, Repository } from 'typeorm';
 import imageImgBBService from 'src/service/Image/imbb';
 import ImageImgBBDT from 'src/service/Image/ImageDTO';
 import { Image } from '../image/entities/image.entity';
@@ -57,7 +57,6 @@ export class CourseService {
       courseIds = cart.map((cart) => {
         return cart.courseId;
       });
-      console.log(courseIds);
     }
     return this.courseRepository.find({
       where: {
@@ -122,6 +121,8 @@ export class CourseService {
           avatar: true,
         },
         subCategories: true,
+        comments: true,
+        carts: true,
       },
       select: {
         created_by: {
@@ -180,5 +181,45 @@ export class CourseService {
       cart = carts[0];
     }
     return cart;
+  };
+
+  search = async (query) => {
+    const { keyword = '', order_by, price, category } = query;
+    const queryString = `
+    SELECT * FROM course
+    WHERE bodau(course.title) like bodau("%${keyword}%") or bodau(course.description) like bodau("%${keyword}%") 
+  `;
+    const entities = await this.courseRepository.query(queryString);
+    const courseId = entities.map((course) => {
+      return course.id;
+    });
+    const wheres: { id?: any; subCategories?: any; price?: any } = {
+      id: In(courseId),
+    };
+
+    if (category)
+      wheres.subCategories = {
+        id: In(category),
+      };
+
+    if (price) {
+      wheres.price = price;
+    }
+
+    const courses = await this.courseRepository.find({
+      where: wheres,
+      relations: {
+        lecturers: true,
+        created_by: true,
+        image: true,
+        subCategories: true,
+        sections: {
+          items: { typeItem: true, lecture: true },
+        },
+      },
+    });
+    return courses;
+    const res = await this.courseRepository.find();
+    return res;
   };
 }

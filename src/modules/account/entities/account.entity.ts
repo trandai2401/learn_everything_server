@@ -60,8 +60,8 @@ export class Account {
   @OneToMany(() => Cart, (cart) => cart.account)
   carts: Cart[];
 
-  @OneToMany(() => Payment, (payment) => payment.account)
-  payments?: Payment[];
+  // @OneToMany(() => Payment, (payment) => payment.account)
+  // payments?: Payment[];
 
   @OneToMany(() => Comment, (comment) => comment.account)
   comments: Comment[];

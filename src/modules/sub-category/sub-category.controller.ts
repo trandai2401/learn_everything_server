@@ -10,6 +10,7 @@ import {
 import { SubCategoryService } from './sub-category.service';
 import { CreateSubCategoryDto } from './dto/create-sub-category.dto';
 import { UpdateSubCategoryDto } from './dto/update-sub-category.dto';
+import { Public } from 'src/decorators/auth';
 
 @Controller('sub-category')
 export class SubCategoryController {
@@ -21,8 +22,9 @@ export class SubCategoryController {
   }
 
   @Get()
-  findAll() {
-    return this.subCategoryService.findAll();
+  @Public()
+  async findAll() {
+    return await this.subCategoryService.findAll();
   }
 
   @Get(':id')

@@ -31,6 +31,8 @@ export class PaymentService {
   };
 
   public payment = async (paymentId) => {
-    this.cartService.payment(paymentId);
+    // this.cartRepository.update({ payment: paymentId }, { status: true });
+
+    this.paymentRepository.update({ id: paymentId }, { status: true });
   };
 }

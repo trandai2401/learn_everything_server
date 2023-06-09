@@ -3,14 +3,17 @@ import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './entities/cart.entity';
-import { Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { Account } from '../account/entities/account.entity';
 import { Course } from '../course/entities/course.entity';
+import { ItemPayment } from '../item-payment/entities/item-payment.entity';
 
 @Injectable()
 export class CartService {
   constructor(
     @InjectRepository(Cart) private cartRepository: Repository<Cart>,
+    @InjectRepository(ItemPayment)
+    private itemPaymentRepository: Repository<ItemPayment>,
   ) {}
   create(accountId, courseId) {
     const account = new Account();
@@ -28,10 +31,22 @@ export class CartService {
   findAll() {
     return `This action returns all cart`;
   }
+  // Giaasy danh sacsh khaso hoc cua ban than
+  async findOne(id: number): Promise<Cart[]> {
+    const itemPayments = await this.itemPaymentRepository.find({
+      where: {
+        payment: {
+          status: true,
+        },
+      },
+      relations: {
+        cart: true,
+      },
+    });
+    const cartIds = itemPayments.map((item) => item.cart.courseId);
 
-  findOne(id: number): Promise<Cart[]> {
     return this.cartRepository.find({
-      where: { account: { id: id }, bought: false },
+      where: { account: { id: id }, courseId: Not(In(cartIds)) },
       relations: {
         course: { image: true, created_by: true },
       },
@@ -45,8 +60,11 @@ export class CartService {
     });
   }
 
-  update(id: number, updateCartDto: UpdateCartDto) {
-    return `This action updates a #${id} cart`;
+  async update(id: number, userId, lecId) {
+    return await this.cartRepository.update(
+      { accountId: userId, courseId: id },
+      { lectureBeingLearned: lecId },
+    );
   }
 
   remove(accountId: number, courseId: number) {
@@ -55,15 +73,33 @@ export class CartService {
   }
 
   payment = async (paymentId) => {
-    this.cartRepository.update(
-      { bought: false, payment: paymentId },
-      { bought: true },
-    );
+    // this.cartRepository.update(
+    //   { bought: false, payment: paymentId },
+    //   { bought: true },
+    // );
   };
 
   getMyCourse = async (userId) => {
-    return this.cartRepository.find({
-      where: { account: { id: userId }, bought: true },
+    const itemPayments = await this.itemPaymentRepository.find({
+      where: {
+        payment: {
+          status: true,
+        },
+      },
+      relations: {
+        cart: true,
+      },
+    });
+    const cartIds = itemPayments.map((item) => item.cart.courseId);
+
+    const res = await this.cartRepository.find({
+      where: {
+        account: { id: userId },
+        course: {
+          id: In(cartIds),
+        },
+      },
+
       relations: {
         course: {
           image: true,
@@ -78,5 +114,6 @@ export class CartService {
         },
       },
     });
+    return res;
   };
 }

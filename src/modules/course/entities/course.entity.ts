@@ -1,5 +1,6 @@
 import { EntityBase } from 'src/Entity/EntityBase';
 import { Account } from 'src/modules/account/entities/account.entity';
+import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { Comment } from 'src/modules/comment/entities/comment.entity';
 import { Image } from 'src/modules/image/entities/image.entity';
 import { Section } from 'src/modules/section/entities/section.entity';
@@ -69,4 +70,7 @@ export class Course extends EntityBase {
 
   @OneToMany(() => Comment, (comment) => comment.course)
   comments: Comment[];
+
+  @OneToMany(() => Cart, (cart) => cart.course)
+  carts: Cart[];
 }

@@ -6,9 +6,20 @@ import { createHmac } from 'crypto';
 import { Public } from 'src/decorators/auth';
 import { formatDateTime } from 'src/utils';
 import * as qs from 'qs';
+import { CartService } from '../cart/cart.service';
+import { ItemPayment } from '../item-payment/entities/item-payment.entity';
+import { Cart } from '../cart/entities/cart.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Payment } from './enitites/payment.entity';
+import { Repository } from 'typeorm';
 @Controller('payment')
 export class PaymentController {
-  constructor(private readonly paymentService: PaymentService) {}
+  constructor(
+    private readonly paymentService: PaymentService,
+    private readonly cartService: CartService,
+    @InjectRepository(ItemPayment)
+    private itemPaymentRepository: Repository<ItemPayment>,
+  ) {}
 
   @Post()
   @Public()
@@ -34,9 +45,22 @@ export class PaymentController {
     const orderId = payment.id;
     const amount = payment.total;
 
-    console.log(payment);
+    const carts = await this.cartService.findOne(+req.body['userId']);
+
+    const itemPayments = await carts.map((cart) => {
+      const itemPayment = new ItemPayment();
+
+      itemPayment.cart = { accountId: cart.accountId, courseId: cart.courseId };
+
+      itemPayment.payment = payment;
+      itemPayment.price = cart.course.price;
+      this.itemPaymentRepository.save(itemPayment);
+
+      return itemPayment;
+    });
 
     const bankCode = req.body.bankCode;
+    console.log(itemPayments, 11);
 
     let locale = req.body.language;
     if (locale === null || locale === '') {
@@ -83,7 +107,6 @@ export class PaymentController {
 
     vnp_Params = this.sortObject(vnp_Params);
     const paymentId = req.query['vnp_TxnRef'];
-    console.log(paymentId);
     this.paymentService.payment(paymentId);
     const tmnCode = config['vnp_TmnCode'];
     const secretKey = config['vnp_HashSecret'];
