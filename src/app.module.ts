@@ -39,6 +39,12 @@ import { ItemPaymentModule } from './modules/item-payment/item-payment.module';
 import { ItemPayment } from './modules/item-payment/entities/item-payment.entity';
 import { LearnedModule } from './modules/learned/learned.module';
 import { Learned } from './modules/learned/entities/learned.entity';
+import { QuestionModule } from './modules/question/question.module';
+import { Question } from './modules/question/entities/question.entity';
+import { TestResultModule } from './modules/test-result/test-result.module';
+import { TestResult } from './modules/test-result/entities/test-result.entity';
+import { ContestantSanswerModule } from './modules/contestant-sanswer/contestant-sanswer.module';
+import { ContestantSanswer } from './modules/contestant-sanswer/entities/contestant-sanswer.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -64,6 +70,9 @@ import { Learned } from './modules/learned/entities/learned.entity';
         Comment,
         ItemPayment,
         Learned,
+        Question,
+        TestResult,
+        ContestantSanswer,
       ],
       synchronize: true,
     }),
@@ -104,6 +113,9 @@ import { Learned } from './modules/learned/entities/learned.entity';
     CommentModule,
     ItemPaymentModule,
     LearnedModule,
+    QuestionModule,
+    TestResultModule,
+    ContestantSanswerModule,
   ],
 
   controllers: [AppController],

@@ -77,6 +77,7 @@ export class CourseService {
           fullName: true,
         },
       },
+      order: { id: 'DESC' },
     });
   }
 
@@ -141,7 +142,7 @@ export class CourseService {
         image: true,
         subCategories: true,
         sections: {
-          items: { typeItem: true, lecture: true },
+          items: { typeItem: true, lecture: true, questions: true },
         },
       },
       select: {
@@ -168,7 +169,12 @@ export class CourseService {
           image: true,
           subCategories: true,
           sections: {
-            items: { typeItem: true, lecture: true, learned: true },
+            items: {
+              typeItem: true,
+              lecture: true,
+              learned: true,
+              questions: true,
+            },
           },
         },
       },
@@ -232,6 +238,7 @@ export class CourseService {
           items: { typeItem: true, lecture: true },
         },
       },
+      order: { id: 'DESC' },
     });
     return { items: courses, count: count };
     const res = await this.courseRepository.find();

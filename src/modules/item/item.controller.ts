@@ -8,6 +8,7 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
+  Request,
 } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -27,6 +28,12 @@ export class ItemController {
   ) {
     const item = await this.itemService.create(createItemDto, file);
 
+    return item;
+  }
+
+  @Post('check')
+  async check(@Body() body, @Request() req) {
+    const item = await this.itemService.check(body, req['user'].sub);
     return item;
   }
 

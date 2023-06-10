@@ -104,6 +104,7 @@ export class CartService {
         course: {
           image: true,
           created_by: { avatar: true },
+          sections: { items: { learned: true } },
         },
       },
       select: {
