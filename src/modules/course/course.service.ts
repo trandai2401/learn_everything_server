@@ -192,15 +192,16 @@ export class CourseService {
       });
     }
 
-    const strAnd = `and course.id not in (${
-      courseIds.length == 0 ? '' : courseIds.join()
-    })`;
+    const strAnd =
+      courseIds.length == 0 ? '' : `and course.id not in (${courseIds.join()})`;
 
     const { keyword = '', order_by, price, category, size = 6 } = query;
     const queryString = `
     SELECT * FROM course
     WHERE (bodau(course.title) like bodau("%${keyword}%") or bodau(course.description) like bodau("%${keyword}%")) ${strAnd} 
   `;
+    console.log(queryString);
+
     const entities = await this.courseRepository.query(queryString);
     const courseId = entities.map((course) => {
       return course.id;
