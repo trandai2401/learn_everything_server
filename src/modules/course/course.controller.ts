@@ -48,9 +48,9 @@ export class CourseController {
 
   @Get('search')
   @Public()
-  async search(@Query() query) {
+  async search(@Query() query, @Request() req) {
     console.log(query);
-    const res = await this.courseService.search(query);
+    const res = await this.courseService.search(query, req?.user?.sub);
     return res;
   }
 

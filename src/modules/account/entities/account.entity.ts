@@ -2,6 +2,7 @@ import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { Comment } from 'src/modules/comment/entities/comment.entity';
 import { Course } from 'src/modules/course/entities/course.entity';
 import { Image } from 'src/modules/image/entities/image.entity';
+import { Learned } from 'src/modules/learned/entities/learned.entity';
 import { Payment } from 'src/modules/payment/enitites/payment.entity';
 import { Role } from 'src/modules/role/entities/role.entity';
 import {
@@ -65,4 +66,7 @@ export class Account {
 
   @OneToMany(() => Comment, (comment) => comment.account)
   comments: Comment[];
+
+  @OneToOne(() => Learned, (learned) => learned.account) // specify inverse side as a second parameter
+  learned: Learned;
 }

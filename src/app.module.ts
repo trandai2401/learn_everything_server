@@ -37,6 +37,8 @@ import { CommentModule } from './modules/comment/comment.module';
 import { Comment } from './modules/comment/entities/comment.entity';
 import { ItemPaymentModule } from './modules/item-payment/item-payment.module';
 import { ItemPayment } from './modules/item-payment/entities/item-payment.entity';
+import { LearnedModule } from './modules/learned/learned.module';
+import { Learned } from './modules/learned/entities/learned.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -61,6 +63,7 @@ import { ItemPayment } from './modules/item-payment/entities/item-payment.entity
         Payment,
         Comment,
         ItemPayment,
+        Learned,
       ],
       synchronize: true,
     }),
@@ -100,6 +103,7 @@ import { ItemPayment } from './modules/item-payment/entities/item-payment.entity
     EventsModule,
     CommentModule,
     ItemPaymentModule,
+    LearnedModule,
   ],
 
   controllers: [AppController],

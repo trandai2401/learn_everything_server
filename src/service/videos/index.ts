@@ -37,6 +37,8 @@ async function uploadImage(file: Express.Multer.File) {
         body: bufferStream,
       },
     });
+
+    console.log('Thông tin trả về khi tải lên drive', res.data);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -59,6 +61,7 @@ async function generatePublicUrl(file: Express.Multer.File) {
       fileId: id,
       fields: 'webViewLink, webContentLink',
     });
+    console.log('Đường dẫn trả về public: ', result.data);
 
     return result.data;
   } catch (error) {}

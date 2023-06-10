@@ -3,7 +3,7 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from './entities/course.entity';
-import { Between, In, Not, Repository } from 'typeorm';
+import { And, Between, In, Not, Repository } from 'typeorm';
 import imageImgBBService from 'src/service/Image/imbb';
 import ImageImgBBDT from 'src/service/Image/ImageDTO';
 import { Image } from '../image/entities/image.entity';
@@ -164,11 +164,11 @@ export class CourseService {
       relations: {
         course: {
           lecturers: true,
-          created_by: true,
+          created_by: { avatar: true, ownedCourses: { image: true } },
           image: true,
           subCategories: true,
           sections: {
-            items: { typeItem: true, lecture: true },
+            items: { typeItem: true, lecture: true, learned: true },
           },
         },
       },
@@ -183,17 +183,30 @@ export class CourseService {
     return cart;
   };
 
-  search = async (query) => {
-    const { keyword = '', order_by, price, category } = query;
+  search = async (query, userId) => {
+    let courseIds = [];
+    if (userId) {
+      const cart = await this.cartService.getMyCourse(userId);
+      courseIds = cart.map((cart) => {
+        return cart.courseId;
+      });
+    }
+
+    const strAnd = `and course.id not in (${
+      courseIds.length == 0 ? '' : courseIds.join()
+    })`;
+
+    const { keyword = '', order_by, price, category, size = 6 } = query;
     const queryString = `
     SELECT * FROM course
-    WHERE bodau(course.title) like bodau("%${keyword}%") or bodau(course.description) like bodau("%${keyword}%") 
+    WHERE (bodau(course.title) like bodau("%${keyword}%") or bodau(course.description) like bodau("%${keyword}%")) ${strAnd} 
   `;
     const entities = await this.courseRepository.query(queryString);
     const courseId = entities.map((course) => {
       return course.id;
     });
-    const wheres: { id?: any; subCategories?: any; price?: any } = {
+
+    let wheres: { id?: any; subCategories?: any; price?: any } = {
       id: In(courseId),
     };
 
@@ -203,11 +216,12 @@ export class CourseService {
       };
 
     if (price) {
-      wheres.price = price;
+      wheres = { ...wheres, price: Between(price[0], price[1]) };
     }
 
-    const courses = await this.courseRepository.find({
+    const [courses, count] = await this.courseRepository.findAndCount({
       where: wheres,
+      take: size,
       relations: {
         lecturers: true,
         created_by: true,
@@ -218,7 +232,7 @@ export class CourseService {
         },
       },
     });
-    return courses;
+    return { items: courses, count: count };
     const res = await this.courseRepository.find();
     return res;
   };

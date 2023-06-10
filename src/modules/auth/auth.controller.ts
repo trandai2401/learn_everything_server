@@ -23,7 +23,7 @@ export class AuthController {
   }
 
   @Get('profile')
-  @Roles(Role.Student)
+  @Public()
   getProfile(@Request() req) {
     return req.user;
   }
