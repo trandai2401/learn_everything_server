@@ -45,6 +45,9 @@ import { TestResultModule } from './modules/test-result/test-result.module';
 import { TestResult } from './modules/test-result/entities/test-result.entity';
 import { ContestantSanswerModule } from './modules/contestant-sanswer/contestant-sanswer.module';
 import { ContestantSanswer } from './modules/contestant-sanswer/entities/contestant-sanswer.entity';
+import { TeacherInfermationModule } from './modules/teacher-infermation/teacher-infermation.module';
+import { TeacherInfermation } from './modules/teacher-infermation/entities/teacher-infermation.entity';
+import { ReportModule } from './modules/report/report.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -73,6 +76,7 @@ import { ContestantSanswer } from './modules/contestant-sanswer/entities/contest
         Question,
         TestResult,
         ContestantSanswer,
+        TeacherInfermation,
       ],
       synchronize: true,
     }),
@@ -116,6 +120,8 @@ import { ContestantSanswer } from './modules/contestant-sanswer/entities/contest
     QuestionModule,
     TestResultModule,
     ContestantSanswerModule,
+    TeacherInfermationModule,
+    ReportModule,
   ],
 
   controllers: [AppController],

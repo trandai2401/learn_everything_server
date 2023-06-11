@@ -6,6 +6,7 @@ import { Image } from 'src/modules/image/entities/image.entity';
 import { Learned } from 'src/modules/learned/entities/learned.entity';
 import { Payment } from 'src/modules/payment/enitites/payment.entity';
 import { Role } from 'src/modules/role/entities/role.entity';
+import { TeacherInfermation } from 'src/modules/teacher-infermation/entities/teacher-infermation.entity';
 import { TestResult } from 'src/modules/test-result/entities/test-result.entity';
 import {
   Column,
@@ -74,4 +75,10 @@ export class Account {
 
   @OneToMany(() => TestResult, (testResult) => testResult.account)
   testResults: TestResult[];
+
+  @OneToOne(
+    () => TeacherInfermation,
+    (teacherInformation) => teacherInformation.account,
+  ) // specify inverse side as a second parameter
+  teacherInformation: TeacherInfermation;
 }
