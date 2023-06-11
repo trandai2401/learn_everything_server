@@ -43,7 +43,7 @@ export class ItemService {
       );
     }
     // const fileContent = await readJSON(file.path);
-    console.log(JSON.parse(file.buffer.toString('utf8')));
+    // console.log(JSON.parse(file.buffer.toString('utf8')));
 
     if (createItemDto.itemTypeId == 2) {
       const prms = [];

@@ -12,6 +12,7 @@ import {
   PrimaryColumn,
   PrimaryGeneratedColumn,
   Unique,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -34,6 +35,12 @@ export class Payment {
   @OneToMany(() => ItemPayment, (itemPayment) => itemPayment.payment)
   itemPayments: ItemPayment[];
 
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  public dateOfPayment: Date;
   // @OneToMany(() => Cart, (cart) => cart.payment)
   // carts: Cart[];
 
